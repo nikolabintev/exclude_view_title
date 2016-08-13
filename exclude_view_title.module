@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Contains exclude_view_title.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Component\Render\HtmlEscapedText;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_help().
+ */
+function exclude_view_title_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the exclude_view_title module.
+    case 'help.page.exclude_view_title':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This modules allows excluding of view title from display') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function exclude_view_title_views_pre_render(ViewExecutable $view) {
+  $exclude_manager = \Drupal::service('exclude_view_title.manager');
+
+  if ($exclude_manager->isViewPageTitleExcluded($view->id(), $view->getDisplay()->display['id'])) {
+    $view->setTitle(new HtmlEscapedText(''));
+  }
+}

@@ -1,0 +1,5 @@
+name: Exclude view title
+type: module
+description: This modules allows excluding of view title from display
+core: 8.x
+package: Custom

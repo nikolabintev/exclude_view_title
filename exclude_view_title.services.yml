@@ -1,0 +1,4 @@
+services:
+  exclude_view_title.manager:
+    class: Drupal\exclude_view_title\ExcludeViewTitleManager
+    arguments: ['@config.factory']

@@ -1,0 +1,3 @@
+administer exclude view title:
+  title: 'Administer exclude view title'
+  restrict access: TRUE

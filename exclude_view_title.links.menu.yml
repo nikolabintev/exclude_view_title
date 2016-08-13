@@ -1,0 +1,5 @@
+exclude_view_title_settings:
+  title: 'Exclude View Title'
+  description: 'Exclude View Title from display'
+  parent: system.admin_config_content
+  route_name: exclude_view_title.exclude_view_title_settings_form
