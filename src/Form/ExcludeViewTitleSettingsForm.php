@@ -124,7 +124,7 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
 
     parent::submitForm($form, $form_state);
 
-    foreach (Cache::getBins() as $service_id => $cache_backend) {
+    foreach (Cache::getBins() as $cache_backend) {
       $cache_backend->deleteAll();
     }
   }
