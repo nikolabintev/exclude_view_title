@@ -117,7 +117,7 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
 
     foreach ($views as $view_key => $pages) {
       foreach ($pages as $page => $value) {
-        $config->set('view.' . $view_key . ':' . $page, $value);
+        $config->set($view_key . '.' . $page, $value);
       }
     }
     $config->save();

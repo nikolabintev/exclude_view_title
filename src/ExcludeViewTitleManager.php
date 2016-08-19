@@ -30,7 +30,7 @@ class ExcludeViewTitleManager implements ExcludeViewTitleManagerInterface {
   public function isViewPageTitleExcluded($view_id, $page_id) {
     $isExcluded = FALSE;
 
-    $view = $this->config_factory->get('view.' . $view_id . ':' . $page_id);
+    $view = $this->config_factory->get($view_id . '.' . $page_id);
 
     if ($view == '1') {
       $isExcluded = TRUE;
