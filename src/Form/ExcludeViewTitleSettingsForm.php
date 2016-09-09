@@ -2,14 +2,14 @@
 
 namespace Drupal\exclude_view_title\Form;
 
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Cache\Cache;
+use Drupal\views\Entity\View;
+use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\exclude_view_title\ExcludeViewTitleManagerInterface;
-use Drupal\views\Views;
-
 /**
  * Class ExcludeViewTitleSettingsForm.
  *
@@ -23,16 +23,23 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
   private $titleManager;
 
   /**
+   * @var CacheTagsInvalidatorInterface
+   */
+  private $cacheTagsInvalidator;
+  /**
    * Constructor.
    * ExcludeViewTitleSettingsForm constructor.
    * @param ConfigFactoryInterface $config_factory
    *  Config factory object.
    * @param ExcludeViewTitleManagerInterface $titleManager
    *  ExcludeViewTitleManager.
+   * @param CacheTagsInvalidatorInterface $cacheTagsInvalidator
+   *  CacheTagsInvalidator.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ExcludeViewTitleManagerInterface $titleManager) {
+  public function __construct(ConfigFactoryInterface $config_factory, ExcludeViewTitleManagerInterface $titleManager, CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
     parent::__construct($config_factory);
     $this->titleManager = $titleManager;
+    $this->cacheTagsInvalidator = $cacheTagsInvalidator;
   }
 
   /**
@@ -41,7 +48,8 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('exclude_view_title.manager')
+      $container->get('exclude_view_title.manager'),
+      $container->get('cache_tags.invalidator')
     );
   }
 
@@ -116,16 +124,14 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
     $views = $form_state->getValues()['views'];
 
     foreach ($views as $view_key => $pages) {
+      $cache_tags = View::load($view_key)->getCacheTagsToInvalidate();
+      // Invalidate view's cache tags.
+      $this->cacheTagsInvalidator->invalidateTags($cache_tags);
       foreach ($pages as $page => $value) {
         $config->set($view_key . '.' . $page, $value);
       }
     }
     $config->save();
-
     parent::submitForm($form, $form_state);
-
-    foreach (Cache::getBins() as $cache_backend) {
-      $cache_backend->deleteAll();
-    }
   }
 }
