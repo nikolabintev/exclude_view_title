@@ -123,15 +123,44 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
     $config = \Drupal::configFactory()->getEditable('exclude_view_title.settings');
     $views = $form_state->getValues()['views'];
 
+    // Get current configurations.
+    $currentConfig = $config->getOriginal();
+
+    // Removes views from the current configuration
+    // if they have been removed from the administration.
+    $deleted_views = array_diff_key($currentConfig, $views);
+    if (!empty($deleted_views)) {
+      foreach ($deleted_views as $view_key => $view) {
+        $config->clear($view_key);
+      }
+    }
+
+    // Changes the configuration if the views settings are modified.
     foreach ($views as $view_key => $pages) {
-      $cache_tags = View::load($view_key)->getCacheTagsToInvalidate();
-      // Invalidate view's cache tags.
-      $this->cacheTagsInvalidator->invalidateTags($cache_tags);
-      foreach ($pages as $page => $value) {
-        $config->set($view_key . '.' . $page, $value);
+      // Add new views configurations.
+      if (!isset($currentConfig[$view_key])) {
+        foreach ($pages as $page => $value) {
+          $config->set($view_key . '.' . $page, $value);
+        }
+        // Invalidate cache tags of the new views.
+        $cache_tags = View::load($view_key)->getCacheTagsToInvalidate();
+        $this->cacheTagsInvalidator->invalidateTags($cache_tags);
+      }
+
+      // Check for changes.
+      $changedPages = array_diff_assoc($pages, $currentConfig[$view_key]);
+
+      // Re-set the configuration of changed pages.
+      foreach ($changedPages as $changedPage => $value) {
+        $config->set($view_key . '.' . $changedPage, $value);
+
+        // Invalidate cache tags of the changed views.
+        $cache_tags = View::load($view_key)->getCacheTagsToInvalidate();
+        $this->cacheTagsInvalidator->invalidateTags($cache_tags);
       }
     }
     $config->save();
+
     parent::submitForm($form, $form_state);
   }
 }
