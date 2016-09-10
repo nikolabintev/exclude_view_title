@@ -19,17 +19,20 @@ use Drupal\exclude_view_title\ExcludeViewTitleManagerInterface;
 class ExcludeViewTitleSettingsForm extends ConfigFormBase {
 
   /**
+   * ExcludeViewTitleManager object.
    * @var ExcludeViewTitleManagerInterface
    */
   private $titleManager;
 
   /**
+   * CacheTagsInvalidator object.
    * @var CacheTagsInvalidatorInterface
    */
   private $cacheTagsInvalidator;
 
   /**
    * ExcludeViewTitleSettingsForm constructor.
+   *
    * @param ConfigFactoryInterface $config_factory
    *  Config factory object.
    * @param ExcludeViewTitleManagerInterface $titleManager

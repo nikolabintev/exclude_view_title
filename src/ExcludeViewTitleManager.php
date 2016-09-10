@@ -12,8 +12,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 class ExcludeViewTitleManager implements ExcludeViewTitleManagerInterface {
 
   /**
+   * Config object
+   *
    * @var \Drupal\Core\Config\Config
-   *  Config object
    */
   private $configFactory;
 
