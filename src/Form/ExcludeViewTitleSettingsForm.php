@@ -20,12 +20,14 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
 
   /**
    * ExcludeViewTitleManager object.
+   *
    * @var ExcludeViewTitleManagerInterface
    */
   private $titleManager;
 
   /**
    * CacheTagsInvalidator object.
+   *
    * @var CacheTagsInvalidatorInterface
    */
   private $cacheTagsInvalidator;
@@ -34,11 +36,11 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
    * ExcludeViewTitleSettingsForm constructor.
    *
    * @param ConfigFactoryInterface $config_factory
-   *  Config factory object.
+   *   Config factory object.
    * @param ExcludeViewTitleManagerInterface $titleManager
-   *  ExcludeViewTitleManager.
+   *   ExcludeViewTitleManager.
    * @param CacheTagsInvalidatorInterface $cacheTagsInvalidator
-   *  CacheTagsInvalidator.
+   *   CacheTagsInvalidator.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ExcludeViewTitleManagerInterface $titleManager, CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
     parent::__construct($config_factory);
