@@ -13,14 +13,15 @@ class ExcludeViewTitleManager implements ExcludeViewTitleManagerInterface {
 
   /**
    * @var \Drupal\Core\Config\Config
+   *  Config object
    */
-  private $config_factory;
+  private $configFactory;
 
   /**
    * Constructor.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->config_factory = $config_factory
+  public function __construct(ConfigFactoryInterface $configFactory) {
+    $this->configFactory = $configFactory
       ->getEditable('exclude_view_title.settings');
   }
 
@@ -30,7 +31,7 @@ class ExcludeViewTitleManager implements ExcludeViewTitleManagerInterface {
   public function isViewPageTitleExcluded($view_id, $page_id) {
     $isExcluded = FALSE;
 
-    $view = $this->config_factory->get($view_id . '.' . $page_id);
+    $view = $this->configFactory->get($view_id . '.' . $page_id);
 
     if ($view == '1') {
       $isExcluded = TRUE;
@@ -38,4 +39,5 @@ class ExcludeViewTitleManager implements ExcludeViewTitleManagerInterface {
 
     return $isExcluded;
   }
+
 }

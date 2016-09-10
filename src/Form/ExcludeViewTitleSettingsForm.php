@@ -10,6 +10,7 @@ use Drupal\views\Entity\View;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\exclude_view_title\ExcludeViewTitleManagerInterface;
+
 /**
  * Class ExcludeViewTitleSettingsForm.
  *
@@ -26,8 +27,8 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
    * @var CacheTagsInvalidatorInterface
    */
   private $cacheTagsInvalidator;
+
   /**
-   * Constructor.
    * ExcludeViewTitleSettingsForm constructor.
    * @param ConfigFactoryInterface $config_factory
    *  Config factory object.
@@ -110,8 +111,8 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
   }
 
   /**
-    * {@inheritdoc}
-    */
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
   }
@@ -163,4 +164,5 @@ class ExcludeViewTitleSettingsForm extends ConfigFormBase {
 
     parent::submitForm($form, $form_state);
   }
+
 }
